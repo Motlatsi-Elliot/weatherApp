@@ -1,5 +1,6 @@
 package com.example.weatherapp_1
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import android.view.View
@@ -10,62 +11,108 @@ import android.widget.Button
 import  android.widget.TextView
 import android.widget.EditText
 import android.widget.LinearLayout
+import java.io.DataInput
+import java.sql.Date
 
 class MainActivity : AppCompatActivity() {
 
+private lateinit var homeScreen: LinearLayout
+private lateinit var forecastDisplay : LinearLayout
+private lateinit var forecastBtn : Button
+private lateinit var dayInputScreen : LinearLayout
+private  lateinit var exitBtn : Button
 
-    /*val days = arrayOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+private lateinit var nxtBtn : Button
+private lateinit var  prevBtn : Button
+private lateinit var inputDay: EditText
+private lateinit var day: TextView
+private  lateinit var avTemp: TextView
+private  lateinit var conditionsImage: TextView
+private lateinit var conditionsText: TextView
+private lateinit var minTemp: TextView
+private lateinit var maxTemp: TextView
 
-    val minTempArr =  arrayOf(8, 3, 2, 4, 9, 2, 5)
 
-    val maxTempArr = arrayOf(400, 30, 60, 60, 90, 48, 85)*/
+    var notFound = true
+    var count = 0
+    val days = arrayOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
-    //Declaring variables
-    val homeScreen = findViewById<LinearLayout>(R.id.homeScreen)
-    val forecastDisplay = findViewById<LinearLayout>(R.id.forecastDisplay)
-    val forecastBtn = findViewById<Button>(R.id.forecastBtn)
-    val dayInputScreen = findViewById<LinearLayout>(R.id.dayInputScreen)
-    val exitBtn = findViewById<Button>(R.id.exitBtn)
-    val prevBtn = findViewById<Button>(R.id.prevBtn)
-    val nxtBtn = findViewById<Button>(R.id.nxtBtn)
-    val inputDay = findViewById<EditText>(R.id.inputDay)
-    val day = findViewById<TextView>(R.id.day)
-    val avTemp = findViewById<TextView>(R.id.avTemp)
-    val conditionsImage = findViewById<TextView>(R.id.conditionsImage)
-    val conditionsText = findViewById<TextView>(R.id.conditionsText)
-    val minTemp = findViewById<TextView>(R.id.minTemp)
-    val maxTemp = findViewById<TextView>(R.id.maxTemp)
+    val minTempArr =  arrayOf("8", "3", "2", "4", "9", "2", "5")
+
+    val maxTempArr = arrayOf("400", "30", "60", "60", "90", "48", "85")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        showScreen(homeScreen)
-
-    }
 
 
-    fun setupWelcomeScreen() {
-        // Show the welcome screen when the app opens
-        showScreen(homeScreen)
-        forecastBtn.setOnClickListener {
-            /*currentQuestion= 0
-            score= 0
-            userAnswers= arrayOfNulls(10)*/
-            showScreen(homeScreen)//calling the showScreen function to show the question screen
-            //All other screens are hidden(visbility set to gone)
-            //loadQuestion()//calling the loadQuestion function to load the first question
+
+
+
+        //Declaring variables
+        homeScreen = findViewById(R.id.homeScreen)
+        forecastDisplay = findViewById(R.id.forecastDisplay)
+        forecastBtn = findViewById(R.id.forecastBtn)
+        dayInputScreen = findViewById(R.id.dayInputScreen)
+        exitBtn = findViewById(R.id.exitBtn)
+        prevBtn = findViewById(R.id.prevBtn)
+        nxtBtn = findViewById(R.id.nxtBtn)
+        inputDay = findViewById(R.id.inputDay)
+        day = findViewById(R.id.day)
+        avTemp = findViewById(R.id.avTemp)
+        conditionsImage = findViewById(R.id.conditionsImage)
+        conditionsText = findViewById(R.id.conditionsText)
+        minTemp = findViewById(R.id.minTemp)
+        maxTemp = findViewById(R.id.maxTemp)
+
+        screenShow(homeScreen)
+
+        forecastBtn.setOnClickListener{
+            screenShow(dayInputScreen)
+        }
+
+        nxtBtn.setOnClickListener {
+            screenShow(forecastDisplay)
+            inputDay.text.clear()
         }
     }
 
 
-    fun showScreen(screenToShow: View) {
+
+    fun screenShow (screenShow: LinearLayout){
+        homeScreen.visibility = View.GONE
         forecastDisplay.visibility = View.GONE
-        dayInputScreen.visibility= View.GONE
-        /*screenReview.visibility= View.GONE*/
-        homeScreen.visibility= View.VISIBLE
+        dayInputScreen.visibility = View.GONE
+        screenShow.visibility = View.VISIBLE
+    }
+    val userDay = inputDay.text.toString().trim().lowercase()
+
+    fun loadDay(){
+    while (count <= days.size && notFound ) {
+        if (userDay == days[count]){
+            notFound = false
+            showForecast()
+
+        }else{
+            count++
+        }
+      }
+    }
+    fun showForecast(){
+        day.text = days[count]
+        val minToInt = minTempArr[count].toInt()
+        val maxToInt = maxTempArr[count].toInt()
+        val avCalculate = maxToInt / minToInt
+
+        avTemp.text = avCalculate.toString()
+        minTemp.text = minToInt.toString()
+        maxTemp.text = maxToInt.toString()
     }
 }
+
+
+
 
 
 
