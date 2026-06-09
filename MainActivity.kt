@@ -1,4 +1,4 @@
-package com.example.weatherapp_1
+package com.example.weather_app
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -19,6 +19,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var exitBtn: Button
     private lateinit var nxtBtn: Button
     private lateinit var prevBtn: Button
+
+    private lateinit var backHomeBtn: Button
+
+    private lateinit var previuseBtn: Button
     private lateinit var inputDay: EditText
     private lateinit var day: TextView
     private lateinit var avTemp: TextView
@@ -50,18 +54,26 @@ class MainActivity : AppCompatActivity() {
         conditionsText = findViewById(R.id.conditionsText)
         minTemp = findViewById(R.id.minTemp)
         maxTemp = findViewById(R.id.maxTemp)
+        backHomeBtn = findViewById(R.id.backHomeBtn)
+        previuseBtn = findViewById(R.id.previuseBtn)
+
 
         screenShow(homeScreen)
-
+       //Home screen Buttons
         forecastBtn.setOnClickListener {
             screenShow(dayInputScreen)
         }
 
+
+        //Day Input Screen Buttons
         nxtBtn.setOnClickListener {
             val userDay = inputDay.text.toString().trim().lowercase()
 
             if (userDay.isEmpty()) {
                 Toast.makeText(this, "Please enter a day", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }else if(userDay.length > 10){
+                Toast.makeText(this, "Please enter a valid day", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -76,12 +88,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         exitBtn.setOnClickListener {
-            screenShow(homeScreen)
+            finish()
         }
 
         prevBtn.setOnClickListener {
+            screenShow(homeScreen)
+        }
+
+
+        //Forecast Display Buttons
+        previuseBtn.setOnClickListener{
             screenShow(dayInputScreen)
         }
+
+        backHomeBtn.setOnClickListener{
+            screenShow(homeScreen)
+
+      }
     }
 
     fun screenShow(screenToShow: LinearLayout) {
@@ -111,5 +134,15 @@ class MainActivity : AppCompatActivity() {
         minTemp.text = "Min Temp: $minToInt°C"
         maxTemp.text = "Max Temp: $maxToInt°C"
 
+        if (avCalculate < 10) {
+            conditionsImage.text = "\uD83C\uDF25\uFE0F"
+            conditionsText.text = "Rainy/Cold"
+        } else if (avCalculate >= 10 && avCalculate < 20) {
+            conditionsImage.text = "☁"
+            conditionsText.text = "Cloudy"
+        }else{
+            conditionsImage.text = "☀\uFE0F"
+            conditionsText.text = "Cloudy"
+        }
     }
 }
