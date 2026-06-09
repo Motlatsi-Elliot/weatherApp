@@ -12,7 +12,7 @@ import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var homeScreen: LinearLayout
+    private lateinit var homeScreen: LinearLayout //Declared but not yet initialized
     private lateinit var forecastDisplay: LinearLayout
     private lateinit var forecastBtn: Button
     private lateinit var dayInputScreen: LinearLayout
